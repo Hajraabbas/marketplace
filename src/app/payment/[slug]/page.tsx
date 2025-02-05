@@ -1,20 +1,9 @@
 "use client"
 import { client, urlFor } from "@/sanity/lib/client";
 import Image from "next/image";
-import { v4 as uuidv4 } from 'uuid';
 import { useState,useEffect } from "react";
-import PaymentForm from "@/components/PaymentForm";
+import PaymentForm from "../../../components/PaymentForm";
 
-interface PaymentFormProps {
-  car: {
-    _id: string;
-    name: string;
-    type: string;
-    image: string;
-    pricePerDay: string;
-    originalPrice: string;
-  };
-}
 
 import {
   Card,
@@ -59,7 +48,7 @@ export default function Payment({ params }: { params: { slug: string } }) {
       }
   
       fetchData();
-    }, []);
+    }, [params.slug]);
 
   if (!car) {
     return;
@@ -76,7 +65,7 @@ export default function Payment({ params }: { params: { slug: string } }) {
             <CardContent className="flex flex-col gap-6">
               <div className="flex items-center gap-4">
                 <Image
-                  src={urlFor(car.image).url()}
+                  src={urlFor({ asset: { _ref: car.image, _type: 'reference' } }).url()}
                   alt={car.name}
                   width={120}
                   height={80}

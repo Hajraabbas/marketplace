@@ -4,7 +4,13 @@ import "./globals.css";
 import Header from "@/components/Header";
 import FooterHandler from "@/components/FooterHandler";
 import { WishlistProvider } from "@/app/context/WishlistContext"; // Import WishlistProvider
-
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,8 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body className={inter.className}>
+      <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         <WishlistProvider> {/* Wrap your app in WishlistProvider */}
           <Header />
           {children}
@@ -27,5 +40,6 @@ export default function RootLayout({
         </WishlistProvider>
       </body>
     </html>
+    </ClerkProvider>
   );
 }

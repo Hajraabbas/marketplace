@@ -1,11 +1,5 @@
 import React, { useState, FormEvent } from "react";
-import sanityClient from '@sanity/client';
-
-const client = sanityClient({
-  projectId: 'yourProjectId',
-  dataset: 'yourDataset',
-  useCdn: true,
-});
+import { client } from "@/sanity/lib/client";
 import { v4 as uuidv4 } from 'uuid';
 
 interface PaymentFormProps {
@@ -145,11 +139,11 @@ export default function PaymentForm({ car }: PaymentFormProps) {
     }
 
     setIsCheckingEmail(true);
-    const emailValidation:any = await checkEmailAndUser(email, firstName, lastName);
+    const emailValidation: { isValid: boolean; error?: string } = await checkEmailAndUser(email, firstName, lastName);
     setIsCheckingEmail(false);
 
     if (!emailValidation.isValid) {
-      setError(emailValidation.error);
+      setError(emailValidation.error || null);
       setIsSubmitting(false);
       return;
     }
@@ -191,7 +185,7 @@ export default function PaymentForm({ car }: PaymentFormProps) {
 
       localStorage.setItem('userEmail', email);
       window.location.href = '/user';
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError('Failed to process payment. Please try again.');
       console.error('Error:', err);
     } finally {

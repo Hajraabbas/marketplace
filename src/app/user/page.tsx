@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { client } from "@/sanity/lib/client";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { client } from '@/sanity/lib/client';
 
 interface Car {
   _id: string;
@@ -72,7 +72,7 @@ export default function AdminPage() {
 
       const result = await client.fetch(query, { email });
       setUserOrder(result);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError('Failed to fetch orders');
       console.error('Error fetching orders:', err);
     } finally {
